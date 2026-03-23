@@ -1,0 +1,22 @@
+name: Deploy to BlackRoad Fleet
+on:
+  push:
+    branches: [main]
+    paths: ['index.html', '*.html']
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          projectName: ${{ github.event.repository.name }}
+          directory: .
+          
+      - name: Notify
+        run: echo "Deployed ${{ github.event.repository.name }} — Pave Tomorrow"
